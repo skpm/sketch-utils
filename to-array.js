@@ -1,4 +1,4 @@
-function toArray(object) {
+module.exports = function toArray(object) {
   if (Array.isArray(object)) {
     return object
   }
