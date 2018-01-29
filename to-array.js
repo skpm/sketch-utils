@@ -4,7 +4,7 @@ function toArray(object) {
   }
   var arr = []
   for (var j = 0; j < (object || []).length; j += 1) {
-    arr.push(object[j]))
+    arr.push(object[j])
   }
   return arr
 }
