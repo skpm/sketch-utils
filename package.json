@@ -1,11 +1,17 @@
 {
   "name": "sketch-utils",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "A collection of useful functions to deal with Sketch's CocoaScript bridge",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mathieu Dutour",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@skpm/buffer": "*",
+    "@skpm/fs": "*",
+    "@skpm/path": "*",
+    "source-map": "^0.6.1"
+  }
 }

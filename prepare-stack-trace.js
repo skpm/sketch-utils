@@ -1,12 +1,13 @@
 /* eslint-disable no-not-accumulator-reassign/no-not-accumulator-reassign, no-var, vars-on-top, prefer-template, prefer-arrow-callback, func-names, prefer-destructuring, object-shorthand */
+var sourcemap = require('./source-map-stack-trace')
 
-module.exports = function prepareStackTrace(stackTrace) {
+module.exports = function prepareStackTrace(stackTrace, options) {
   var stack = stackTrace.split('\n')
-  stack = stack.map(function (s) {
+  stack = stack.map(function(s) {
     return s.replace(/\sg/, '')
   })
 
-  stack = stack.map(function (entry) {
+  stack = stack.map(function(entry) {
     // entry is something like `functionName@path/to/my/file:line:column`
     // or `path/to/my/file:line:column`
     // or `path/to/my/file`
@@ -17,7 +18,7 @@ module.exports = function prepareStackTrace(stackTrace) {
 
     if (fn.indexOf('/Users/') === 0) {
       // actually we didn't have a fn so just put it back in the filePath
-      filePath = fn + (filePath ? ('@' + filePath) : '')
+      filePath = fn + (filePath ? '@' + filePath : '')
       fn = null
     }
 
@@ -42,6 +43,10 @@ module.exports = function prepareStackTrace(stackTrace) {
       column: filePathParts[2],
     }
   })
+
+  if (options.sourcemaps) {
+    return sourcemap(stack)
+  }
 
   return stack
 }

@@ -2,17 +2,26 @@
 var util = require('util')
 var prepareStackTrace = require('./prepare-stack-trace')
 
-var getNativeClass = util.getNativeClass || function (arg) {
-  try {
-    return arg && arg.isKindOfClass && typeof arg.class === 'function' && String(arg.class())
-  } catch (err) {
-    return undefined
+var getNativeClass =
+  util.getNativeClass ||
+  function(arg) {
+    try {
+      return (
+        arg &&
+        arg.isKindOfClass &&
+        typeof arg.class === 'function' &&
+        String(arg.class())
+      )
+    } catch (err) {
+      return undefined
+    }
   }
-}
 
-var isNativeObject = util.isNativeObject || function (arg) {
-  return !!getNativeClass(arg)
-}
+var isNativeObject =
+  util.isNativeObject ||
+  function(arg) {
+    return !!getNativeClass(arg)
+  }
 
 function prepareArray(array, options) {
   return array.map(function(i) {
@@ -51,37 +60,49 @@ function introspectMochaObject(value, options) {
     properties: {
       type: 'Array',
       primitive: 'Array',
-      value: util.toArray(
-        mocha['properties' + (options.withAncestors ? 'WithAncestors' : '')]()
-      ).map(getName),
+      value: util
+        .toArray(
+          mocha['properties' + (options.withAncestors ? 'WithAncestors' : '')]()
+        )
+        .map(getName),
     },
     classMethods: {
       type: 'Array',
       primitive: 'Array',
-      value: util.toArray(
-        mocha['classMethods' + (options.withAncestors ? 'WithAncestors' : '')]()
-      ).map(getSelector),
+      value: util
+        .toArray(
+          mocha[
+            'classMethods' + (options.withAncestors ? 'WithAncestors' : '')
+          ]()
+        )
+        .map(getSelector),
     },
     instanceMethods: {
       type: 'Array',
       primitive: 'Array',
-      value: util.toArray(
-        mocha['instanceMethods' + (options.withAncestors ? 'WithAncestors' : '')]()
-      ).map(getSelector),
+      value: util
+        .toArray(
+          mocha[
+            'instanceMethods' + (options.withAncestors ? 'WithAncestors' : '')
+          ]()
+        )
+        .map(getSelector),
     },
     protocols: {
       type: 'Array',
       primitive: 'Array',
-      value: util.toArray(
-        mocha['protocols' + (options.withAncestors ? 'WithAncestors' : '')]()
-      ).map(getName),
+      value: util
+        .toArray(
+          mocha['protocols' + (options.withAncestors ? 'WithAncestors' : '')]()
+        )
+        .map(getName),
     },
   }
   if (mocha.treeAsDictionary && options.withTree) {
     introspection.treeAsDictionary = {
       type: 'Object',
       primitive: 'Object',
-      value: prepareObject(mocha.treeAsDictionary())
+      value: prepareObject(mocha.treeAsDictionary()),
     }
   }
   return introspection
@@ -91,11 +112,11 @@ function prepareValue(value, options) {
   var type
   var primitive
   if (util.isArray(value)) {
-    type = Array.isArray(value) ? 'Array': String(value.class())
+    type = Array.isArray(value) ? 'Array' : String(value.class())
     primitive = 'Array'
     value = prepareArray(util.toArray(value), options)
   } else if (util.isBoolean(value)) {
-    type = typeof value === 'boolean' ? 'Boolean': String(value.class())
+    type = typeof value === 'boolean' ? 'Boolean' : String(value.class())
     primitive = 'Boolean'
     value = Boolean(value)
   } else if (util.isNullOrUndefined(value) || Number.isNaN(value)) {
@@ -103,11 +124,11 @@ function prepareValue(value, options) {
     primitive = 'Empty'
     value = String(value)
   } else if (util.isNumber(value)) {
-    type = typeof value === 'number' ? 'Number': String(value.class())
+    type = typeof value === 'number' ? 'Number' : String(value.class())
     primitive = 'Number'
     value = Number(value)
   } else if (util.isString(value)) {
-    type = typeof value === 'string' ? 'String': String(value.class())
+    type = typeof value === 'string' ? 'String' : String(value.class())
     primitive = 'String'
     value = String(value)
   } else if (util.isSymbol(value)) {
@@ -133,11 +154,11 @@ function prepareValue(value, options) {
     value = {
       message: value.message,
       name: value.name,
-      stack: prepareStackTrace(value.stack),
+      stack: prepareStackTrace(value.stack, options),
     }
   } else if (util.isObject(value)) {
     var nativeClass = getNativeClass(value)
-    type = nativeClass ? nativeClass: 'Object'
+    type = nativeClass ? nativeClass : 'Object'
     primitive = 'Object'
     value = prepareObject(util.toObject(value), options)
   } else if (isNativeObject(value)) {
@@ -152,12 +173,14 @@ function prepareValue(value, options) {
       value = {
         message: String(value.reason()),
         name: String(value.name()),
-        stack: prepareStackTrace(stack),
-        userInfo: prepareObject(util.toObject(value.userInfo()), options)
+        stack: prepareStackTrace(stack, options),
+        userInfo: prepareObject(util.toObject(value.userInfo()), options),
       }
     } else if (value.class().mocha) {
       primitive = 'Mocha'
-      value = (options || {}).skipMocha ? type : introspectMochaObject(value, options)
+      value = (options || {}).skipMocha
+        ? type
+        : introspectMochaObject(value, options)
     } else {
       primitive = 'Unknown'
       value = type
