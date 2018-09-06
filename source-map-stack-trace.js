@@ -184,12 +184,10 @@ module.exports = function(stack) {
       // the file is the last part of the filePath
       var file = filePath.split('/')
       file = file[file.length - 1]
-      mappedStack.push({
-        ...frame,
-        ...mappedPosition,
+      mappedStack.push(Object.assign({}, frame, mappedPosition, {
         filePath: filePath,
         file: file,
-      })
+      }))
     } else {
       mappedStack.push(frame)
     }
