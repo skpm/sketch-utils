@@ -167,14 +167,15 @@ function prepareValue(value, options) {
     if (type === 'NSException') {
       primitive = 'Error'
       var stack = ''
-      if (value.userInfo && value.userInfo() && value.userInfo().stack) {
-        stack = String(value.userInfo().stack)
+      var userInfo = value.userInfo && value.userInfo() ? value.userInfo() : {}
+      if (userInfo.stack) {
+        stack = String(userInfo.stack)
       }
       value = {
         message: String(value.reason()),
         name: String(value.name()),
         stack: prepareStackTrace(stack, options),
-        userInfo: prepareObject(util.toObject(value.userInfo()), options),
+        userInfo: prepareObject(util.toObject(userInfo), options),
       }
     } else if (value.class().mocha) {
       primitive = 'Mocha'
