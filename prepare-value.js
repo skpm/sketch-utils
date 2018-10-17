@@ -118,7 +118,7 @@ function prepareValue(value, options) {
   } else if (util.isBoolean(value)) {
     type = typeof value === 'boolean' ? 'Boolean' : String(value.class())
     primitive = 'Boolean'
-    value = Boolean(value)
+    value = Boolean(Number(value))
   } else if (util.isNullOrUndefined(value) || Number.isNaN(value)) {
     type = 'Empty'
     primitive = 'Empty'
