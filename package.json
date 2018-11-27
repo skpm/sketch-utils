@@ -1,6 +1,6 @@
 {
   "name": "sketch-utils",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "A collection of useful functions to deal with Sketch's CocoaScript bridge",
   "main": "index.js",
   "scripts": {

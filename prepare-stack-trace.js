@@ -44,7 +44,7 @@ module.exports = function prepareStackTrace(stackTrace, options) {
     }
   })
 
-  if (options.sourcemaps) {
+  if (options && options.sourcemaps) {
     return sourcemap(stack)
   }
 
