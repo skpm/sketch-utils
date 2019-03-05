@@ -134,16 +134,19 @@ function prepareValue(value, options) {
   } else if (util.isSymbol(value)) {
     type = 'Symbol'
     primitive = 'Symbol'
+    value = util.inspect(value)
   } else if (util.isRegExp(value)) {
     type = 'RegExp'
     primitive = 'RegExp'
+    value = util.inspect(value)
   } else if (util.isDate(value)) {
     type = 'Date'
     primitive = 'Date'
+    value = util.inspect(value)
   } else if (util.isFunction(value)) {
-    type = 'Function'
+    type = typeof value === 'function' ? 'Function' : String(value.class())
     primitive = 'Function'
-    value = String(value)
+    value = typeof value === 'function' ? '[Function]' : String(value.class())
   } else if (util.isBuffer(value)) {
     type = 'Buffer'
     primitive = 'Buffer'
