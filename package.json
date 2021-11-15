@@ -3,6 +3,10 @@
   "version": "0.2.10",
   "description": "A collection of useful functions to deal with Sketch's CocoaScript bridge",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skpm/sketch-utils.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
